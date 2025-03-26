@@ -6,7 +6,7 @@ export default function Analytics() {
 
     const handleGetAnalytics = async () => {
         try {
-            const res = await axios.get(`http://localhost:5000/url/analytics/${shortId}`);
+            const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/url/analytics/${shortId}`);
             setAnalytics(res.data);
         } catch (error) {
             console.error("Error fetching analytics", error);
