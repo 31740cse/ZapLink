@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZapLink - URL Shortener</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <main class="main-content">
+        <!-- Auth Toggle Button -->
+        <div class="auth-toggle">
+            <button id="toggleAuthBtn" class="btn btn-secondary">Login / Register</button>
+            <span id="userInfo" class="user-info" style="display: none;">
+                <span id="username"></span>
+                <button id="logoutBtn" class="btn-logout">Logout</button>
+            </span>
+        </div>
+
+        <!-- Auth Modal -->
+        <div id="authModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeAuthModal()">&times;</span>
+
+                <!-- Login Form -->
+                <div id="loginForm" class="auth-form">
+                    <h2>Login</h2>
+                    <form id="loginFormElement">
+                        <div class="form-group">
+                            <label for="loginUsername">Username</label>
+                            <input type="text" id="loginUsername" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input type="password" id="loginPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                        <p class="toggle-auth">Don't have an account? <a href="#" onclick="toggleAuthForms(event)">Register</a></p>
+                    </form>
+                </div>
+
+                <!-- Register Form -->
+                <div id="registerForm" class="auth-form">
+                    <h2>Register</h2>
+                    <form id="registerFormElement">
+                        <div class="form-group">
+                            <label for="regUsername">Username</label>
+                            <input type="text" id="regUsername" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regEmail">Email</label>
+                            <input type="email" id="regEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regPassword">Password</label>
+                            <input type="password" id="regPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Register</button>
+                        <p class="toggle-auth">Already have an account? <a href="#" onclick="toggleAuthForms(event)">Login</a></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shorten URL Form -->
+        <div class="card">
+            <h2>Create Short Link</h2>
+            <form id="shortenForm">
+                <div class="form-group">
+                    <label for="originalUrl">Enter Long URL</label>
+                    <input
+                        type="url"
+                        id="originalUrl"
+                        name="originalUrl"
+                        placeholder="https://example.com/very/long/url"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="customCode">Custom Short Code (Optional)</label>
+                    <input
+                        type="text"
+                        id="customCode"
+                        name="customCode"
+                        placeholder="e.g., abc123"
+                        maxlength="10"
+                    >
+                    <small>Leave empty for auto-generated code</small>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Shorten URL</button>
+            </form>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loading" class="loading" style="display: none;">
+            <p>Creating short link...</p>
+        </div>
+
+        <!-- Result Card -->
+        <div id="resultCard" class="card result-card" style="display: none;">
+            <h2>✓ Link Created!</h2>
+
+            <div class="result-item">
+                <label>Short Code</label>
+                <div class="result-display">
+                    <span id="shortCode" class="code"></span>
+                    <button type="button" class="btn-copy" onclick="copyToClipboard('shortCode')">
+                        📋 Copy
+                    </button>
+                </div>
+            </div>
+
+            <div class="result-item">
+                <label>Short URL</label>
+                <div class="result-display">
+                    <input
+                        type="text"
+                        id="shortUrl"
+                        readonly
+                        class="result-input"
+                    >
+                    <button type="button" class="btn-copy" onclick="copyToClipboard('shortUrl')">
+                        📋 Copy
+                    </button>
+                </div>
+            </div>
+
+            <div class="result-item">
+                <label>Original URL</label>
+                <div class="result-display">
+                    <input
+                        type="text"
+                        id="originalUrlDisplay"
+                        readonly
+                        class="result-input"
+                    >
+                    <button type="button" class="btn-copy" onclick="copyToClipboard('originalUrlDisplay')">
+                        📋 Copy
+                    </button>
+                </div>
+            </div>
+
+            <div class="result-item">
+                <label>Created At</label>
+                <p id="createdAt" class="text-muted"></p>
+            </div>
+
+            <div class="action-buttons">
+                <a id="testRedirectBtn" href="#" target="_blank" class="btn btn-secondary">
+                    🔗 Test Link
+                </a>
+                <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                    ➕ Create Another
+                </button>
+            </div>
+        </div>
+
+        <!-- Error Card -->
+        <div id="errorCard" class="card error-card" style="display: none;">
+            <h2>❌ Error</h2>
+            <p id="errorMessage" class="error-text"></p>
+            <button type="button" class="btn btn-secondary" onclick="closeError()">
+                Close
+            </button>
+        </div>
+
+        <!-- User's URLs Section (Authenticated only) -->
+        <div id="userUrlsSection" class="card" style="display: none;">
+            <h2>My URLs</h2>
+            <div id="userUrlsList" class="recent-list">
+                <p class="text-muted">Loading...</p>
+            </div>
+        </div>
+
+        <!-- Recent URLs Section -->
+        <div class="card">
+            <h2>Recent URLs</h2>
+            <div id="recentList" class="recent-list">
+                <p class="text-muted">No recent URLs yet</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
