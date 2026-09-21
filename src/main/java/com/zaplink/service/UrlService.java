@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.time.LocalDateTime;
 
@@ -24,6 +25,7 @@ public class UrlService {
     private final UrlRepository urlRepository;
     private final UrlEncodingService encodingService;
     private final AppProperties appProperties;
+    private final HttpServletRequest request;
 
     public ShortenResponse shortenUrl(ShortenRequest request, User user) {
         log.info("Shortening URL: {}", request.getOriginalUrl());
@@ -123,10 +125,26 @@ public class UrlService {
     private ShortenResponse mapToResponse(Url url) {
         return ShortenResponse.builder()
                 .shortCode(url.getShortCode())
-                .shortUrl(appProperties.getShortUrlBase() + "/v1/" + url.getShortCode())
+                .shortUrl(getShortUrl(url.getShortCode()))
                 .originalUrl(url.getOriginalUrl())
                 .createdAt(url.getCreatedAt())
                 .expiresAt(url.getExpiresAt())
                 .build();
+    }
+
+    public String getShortUrl(String shortCode) {
+        String configuredBase = appProperties.getShortUrlBase();
+        String base = configuredBase == null || configuredBase.isBlank()
+                ? getRequestBaseUrl()
+                : configuredBase.replaceAll("/$", "");
+        return base + "/v1/" + shortCode;
+    }
+
+    private String getRequestBaseUrl() {
+        String forwardedProto = request.getHeader("X-Forwarded-Proto");
+        String forwardedHost = request.getHeader("X-Forwarded-Host");
+        String scheme = forwardedProto != null ? forwardedProto.split(",")[0].trim() : request.getScheme();
+        String host = forwardedHost != null ? forwardedHost.split(",")[0].trim() : request.getHeader("Host");
+        return scheme + "://" + host + "/api";
     }
 }

@@ -13,7 +13,7 @@ public class AppProperties {
     private String version = "1.0.0";
 
     // URL Configuration
-    private String shortUrlBase = "http://localhost:8080/api";
+    private String shortUrlBase = "";
     private Integer shortCodeLength = 8;
     private String base62Alphabet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 

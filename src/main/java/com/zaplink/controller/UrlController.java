@@ -103,7 +103,7 @@ public class UrlController {
         List<ShortenResponse> urls = user.getUrls().stream()
                 .map(url -> ShortenResponse.builder()
                         .shortCode(url.getShortCode())
-                        .shortUrl(appProperties.getShortUrlBase() + "/v1/" + url.getShortCode())
+                        .shortUrl(urlService.getShortUrl(url.getShortCode()))
                         .originalUrl(url.getOriginalUrl())
                         .createdAt(url.getCreatedAt())
                         .expiresAt(url.getExpiresAt())
