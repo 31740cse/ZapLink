@@ -17,9 +17,9 @@ WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
 ENV PORT=8080 \
-    SPRING_DATASOURCE_URL=jdbc:h2:file:./data/zaplink \
-    SPRING_DATASOURCE_USERNAME=sa \
-    SPRING_DATASOURCE_PASSWORD= \
+    SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/zaplink \
+    SPRING_DATASOURCE_USERNAME=zaplink \
+    SPRING_DATASOURCE_PASSWORD=zaplink \
     ZAPLINK_SHORT_URL_BASE= \
     ZAPLINK_JWT_SECRET=change-this-secret \
     ZAPLINK_JWT_EXPIRATION_MS=86400000 \
