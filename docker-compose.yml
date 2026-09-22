@@ -1,38 +1,17 @@
 services:
-  db:
-    image: postgres:16-alpine
-    container_name: zaplink-db
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: zaplink
-      POSTGRES_USER: zaplink
-      POSTGRES_PASSWORD: zaplink
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U zaplink -d zaplink"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-
   app:
     build: .
     container_name: zaplink-app
     restart: unless-stopped
-    depends_on:
-      db:
-        condition: service_healthy
     environment:
       PORT: 8080
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/zaplink
-      SPRING_DATASOURCE_USERNAME: zaplink
-      SPRING_DATASOURCE_PASSWORD: zaplink
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_DATASOURCE_SSLMODE: ${SPRING_DATASOURCE_SSLMODE:-require}
       ZAPLINK_SHORT_URL_BASE: ${ZAPLINK_SHORT_URL_BASE:-}
-      ZAPLINK_JWT_SECRET: ${ZAPLINK_JWT_SECRET:-change-this-secret}
+      ZAPLINK_JWT_SECRET: ${ZAPLINK_JWT_SECRET:?Set ZAPLINK_JWT_SECRET}
       ZAPLINK_JWT_EXPIRATION_MS: ${ZAPLINK_JWT_EXPIRATION_MS:-86400000}
-      ZAPLINK_ALLOWED_ORIGINS: ${ZAPLINK_ALLOWED_ORIGINS:-http://localhost:8080}
+      ZAPLINK_ALLOWED_ORIGINS: ${ZAPLINK_ALLOWED_ORIGINS:?Set ZAPLINK_ALLOWED_ORIGINS}
     ports:
       - "8080:8080"
-
-volumes:
-  postgres_data:

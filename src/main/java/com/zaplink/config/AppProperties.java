@@ -27,8 +27,8 @@ public class AppProperties {
     private Integer rateLimitRequestsPerMinute = 100;
 
     // Security & JWT
-    private String jwtSecret = "your-super-secret-key-make-it-very-long-at-least-32-characters-long";
+    private String jwtSecret;
     private Long jwtExpirationMs = 86400000L;  // 24 hours
-    private String allowedOrigins = "http://localhost:3000,http://localhost:8000,http://localhost:80";
+    private String allowedOrigins = "";
     private Integer passwordMinLength = 8;
 }

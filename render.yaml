@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: zaplink
+    runtime: docker
+    plan: 0.5c-512mb
+    healthCheckPath: /
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+      - key: SPRING_DATASOURCE_SSLMODE
+        value: require
+      - key: ZAPLINK_SHORT_URL_BASE
+        sync: false
+      - key: ZAPLINK_JWT_SECRET
+        generateValue: true
+      - key: ZAPLINK_JWT_EXPIRATION_MS
+        value: "86400000"
+      - key: ZAPLINK_ALLOWED_ORIGINS
+        sync: false

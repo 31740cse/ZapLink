@@ -1,7 +1,7 @@
 target/
+.git/
 .idea/
 .vscode/
-*.iml
+data/
 application-local.properties
-data/*.mv.db
-data/*.trace.db
+*.iml

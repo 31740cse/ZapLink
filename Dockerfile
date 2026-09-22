@@ -16,6 +16,8 @@ WORKDIR /app
 
 COPY --from=build /app/target/*.jar app.jar
 
+ENV ZAPLINK_JWT_EXPIRATION_MS=86400000
+
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "/app/app.jar"]
